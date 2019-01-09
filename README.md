@@ -1,6 +1,6 @@
 # Encoder
 
-An Arduino Rotary Encoder Library that actually works with zero glitches
+An Arduino Rotary Encoder Library that actually works
 
 # Motivation
 
@@ -8,7 +8,7 @@ A lot of discussion can be found on the internet about the best approach to hand
 
 - The simpler approach consists on trying to catch the encoder ticks on the main loop. Of course this doesn't work because as the program gets longer and takes more to complete a loop, encoder ticks start to be missed.
 
-- The second approach is seting up one or more input interrupts that trigger as the Encoder moves. This doesn't work either because there no way to avoid contact bounces on the encoder, thus leading to inacurate or erratic response.
+- The second approach is seting up one or more input interrupts that trigger as the rotary encoder moves. This doesn't work either because there's no way to avoid encoder contact bounces, thus leading to inacurate or erratic response.
 
 - I also found attempts to filter or eliminate the bounces by hardware implementations such as adding capacitators and other tricks. This may improve results on the second approach mentioned abobe, but it's difficult to find the right balance between bounce removal and quick encoder response.
 
@@ -16,13 +16,13 @@ So, in summary, nothing that I found so far actually works as well as it could b
 
 # Features
 
-So what I did is to think fresh and used a totally different approach that works. Instead of relying on input interrupts I rely on time interrupts. This enables a robust, yet simple, software implementation that solves all the problems at once and by once. The Encoder library reacts precisely to very fast encoder moves without a miss of a tick and without any bounces, regardless of the lenght or complexity of your other code. It just works! 
+So I started fresh and used a totally different approach that works. Instead of relying on input interrupts I rely on time interrupts. This enables a robust, yet simple, software implementation that solves all the problems at once and by once. The Encoder library reacts precisely to very fast encoder moves without a miss of a tick and without any bounces, regardless of the length or complexity of your other code. It just works! 
 
-Oh, and there's no limit on the number of encoders in use because you can conect them to any available regular inputs and all of them will seamlesly work indepently.
+There's no limit on the number of encoders in use because you can just connect any number of them to the available inputs and all of them will seamlesly work indepently.
 
 # How it works
 
-You just create an Encoder object initialized to the pins the encoder is connected. Any input pins work, no need to be interrupt pins or anything. Just plain digital inputs. On the setup funcion call the `EncoderInterrupt.begin` function and pass in your encoder object. On the loop function call the `encoder.delta` function to get the encoder variation since the last call. That's it. Here's the code:
+You create an Encoder object initialized to the pins the encoder is connected. Any input pins will work, no need to be interrupt pins or anything. Just plain digital inputs. On the `setup` funcion call the `EncoderInterrupt.begin` function and pass in your encoder object. On the `loop` function call the `encoder.delta` function to get the encoder travel since your last call. That's it. Here's the code:
 
 ```
 // define the input pins
@@ -61,5 +61,5 @@ void loop()
 
 # More
 
-A template code using several encoders is available as a comment in the Encoder.h header file.
+- A template code for several encoders is available as a comment in the Encoder.h header file.
 
