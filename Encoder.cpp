@@ -6,18 +6,55 @@
 EncoderInterruptClass EncoderInterrupt;
 void computeEncoder();
 
+
+void setupTimerInterrupt()
+{
+  TCCR3A = 0; // set entire TCCR3A register to 0
+  TCCR3B = 0; // same for TCCR3B
+  TCNT3  = 0; //initialize counter value to 0
+
+  // set compare match register (write to the high bit first) 
+  OCR3AH = 0;
+  
+  // set compare match register for particular frequency increments
+//  OCR3AL = 133; // = (16000000) / 64 / 2000  -> 133   This is  clock_frequency / prescaler / desired_frequency  ( 2 KHz, 0.5ms)
+//  OCR3AL = 50;  // = (16000000) / 64 / 5000  ->  50   This is  clock_frequency / prescaler / desired_frequency  ( 5 KHz, 0.2ms)
+//  OCR3AL = 25;  // = (16000000) / 64 / 10000 ->  25   This is  clock_frequency / prescaler / desired_frequency  (10 kHz, 0.1ms)
+  OCR3AL = INTERRUPT_PERIOD; 
+  
+  // enable timer compare interrupt
+  TIMSK3 = (1 << OCIE3A);
+  
+  // turn on mode 4 (up to OCR3A)
+  TCCR3B |= (1 << WGM32);
+  
+  // Set CS10 and CS12 bits for 64 prescaler
+  TCCR3B |= (1 << CS30) | (1 << CS31);
+
+  // More information at
+  // http://medesign.seas.upenn.edu/index.php/Guides/MaEvArM-timers 
+  //
+}
+
+
+SIGNAL(TIMER3_COMPA_vect) 
+{  
+  computeEncoder();
+}
+
+/*  Alternative using timer 1 (Unusable pin 10, 11 for PWM)
 void setupTimerInterrupt()
 {
   TCCR1A = 0; // set entire TCCR1A register to 0
   TCCR1B = 0; // same for TCCR1B
   TCNT1  = 0; //initialize counter value to 0
   
+  OCR1AH = 0;
   // set compare match register for particular frequency increments
 //  OCR1AL = 133; // = (16000000) / 64 / 2000  -> 133   This is  clock_frequency / prescaler / desired_frequency  ( 2 KHz, 0.5ms)
 //  OCR1AL = 50;  // = (16000000) / 64 / 5000  ->  50   This is  clock_frequency / prescaler / desired_frequency  ( 5 KHz, 0.2ms)
 //  OCR1AL = 25;  // = (16000000) / 64 / 10000 ->  25   This is  clock_frequency / prescaler / desired_frequency  (10 kHz, 0.1ms)
   OCR1AL = INTERRUPT_PERIOD; 
-  OCR1AH = 0;
   
   // enable timer compare interrupt
   TIMSK1 |= (1 << OCIE1A);
@@ -33,7 +70,7 @@ SIGNAL(TIMER1_COMPA_vect)
 {  
   computeEncoder();
 }
-
+*/
 
 /*  Alternative using timer 0 that is used for millis()
 void setupTimerInterrupt()
@@ -64,7 +101,7 @@ void Encoder::init()
 {
   pinMode( _pinA, INPUT );
   pinMode( _pinB, INPUT );
-  pinMode( _pinP, INPUT );
+  pinMode( _pinP, INPUT_PULLUP );
 
   byte eA = !digitalRead( _pinA );
   byte eB = !digitalRead( _pinB );
