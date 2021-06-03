@@ -8,12 +8,14 @@ class Encoder
 public:
   Encoder( byte pinA, byte pinB, byte pinP ) : 
     _pinA( pinA ), _pinB( pinB ), _pinP( pinP ),
-    _encoderValueVL(0), _encoderTickVL(0), _encoderButtonVL(false), 
+    _encoderValueVL(0), _encoderTickVL(0), _encoderTick2VL(0),
+    _encoderButtonVL(false),
     _encoderValue(0), _encoderTick(0) {}
 
 public:
   int delta();
   int deltaTick();
+  int deltaTick2();
   bool button() const { return _encoderButtonVL; }
 
 private:
@@ -23,10 +25,12 @@ private:
 private:
   volatile unsigned int _encoderValueVL = 0;
   volatile unsigned int _encoderTickVL = 0;
+  volatile unsigned int _encoderTick2VL = 0;
   volatile bool _encoderButtonVL = false;
   volatile byte _encoderStVL;
   unsigned int _encoderValue = 0;
   unsigned int _encoderTick = 0;
+  unsigned int _encoderTick2 = 0;
   byte _pinA, _pinB, _pinP;
 
 public:
