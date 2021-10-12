@@ -161,17 +161,19 @@ void Encoder::compute()
       if ( wentDown ) _encoderValueVL--;
       else _encoderValueVL++;
 
-      if ( st == 0 || st == 3 )
+      /* if ( st == 0 || st == 3 )
       {
         if ( wentDown ) _encoderTickVL--;
         else _encoderTickVL++;
-      }
-      
-      if ( st == 0 )
+      }*/
+      _encoderTickVL = _encoderValueVL/2 ;
+
+      /*if ( st == 0 )
       {
         if ( wentDown ) _encoderTick2VL--;
         else _encoderTick2VL++;
-      }
+      }*/
+      _encoderTick2VL = _encoderTickVL/2;
       
       _encoderStVL = st;
     }
