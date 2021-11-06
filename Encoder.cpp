@@ -143,7 +143,7 @@ void Encoder::init()
 
 void Encoder::compute()
 {
-  static Debouncer stDebouncer, pDebouncer;
+  static EncoderDebouncer stDebouncer, pDebouncer;
 
   byte eA = !digitalRead( _pinA );
   byte eB = !digitalRead( _pinB );
@@ -231,7 +231,7 @@ void computeEncoder()
   EncoderInterrupt.computeAll();
 }
 
-bool Debouncer::isDebounced( byte value, byte debounceCount)
+bool EncoderDebouncer::isDebounced( byte value, byte debounceCount)
 {
   if ( _keepValue != value ) 
   {

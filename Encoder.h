@@ -55,14 +55,14 @@ public:
   friend void computeEncoder();
 };
 
-class Debouncer
+class EncoderDebouncer
 {
   private:
     byte _keepValue;
     byte _bounce;
     
   public:
-    Debouncer():_keepValue(0), _bounce(0) {}
+    EncoderDebouncer():_keepValue(0), _bounce(0) {}
     bool isDebounced( byte value, byte debounceCount);
 };
 
