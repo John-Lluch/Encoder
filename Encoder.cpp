@@ -143,8 +143,6 @@ void Encoder::init()
 
 void Encoder::compute()
 {
-  static Debouncer stDebouncer, pDebouncer;
-
   byte eA = !digitalRead( _pinA );
   byte eB = !digitalRead( _pinB );
   bool pb = !digitalRead( _pinP ); 

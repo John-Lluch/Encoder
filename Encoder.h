@@ -2,6 +2,23 @@
 #ifndef Encoder_H
 #define Encoder_H
 
+class Debouncer
+{
+  private:
+    byte _keepValue;
+    byte _bounce;
+  
+  public:
+    Debouncer():_keepValue(0), _bounce(0) {}
+    bool isDebounced( byte value, byte debounceCount);
+};
+
+#define DEBOUNCE_COUNT 3    // This is the number of consecutive reads that must be the same before accepting a pin change
+#define INTERRUPT_PERIOD 25 // This is   cpu_clock_frequency / prescaler / desired_interrupt_frequency
+                            // for example, set to 133 for 0.5ms (2kHz)  on a 16MHz processor: (16000000L / 64 / 2000  -> 133
+                            // for example, set to 50  for 0.2ms (5kHz)  on a 16MHz processor: (16000000L / 64 / 5000  -> 50
+                            // for example, set to 25  for 0.1ms (10kHz) on a 16MHz processor: (16000000L / 64 / 10000 -> 25
+
 class Encoder
 {
 
@@ -32,6 +49,7 @@ private:
   unsigned int _encoderTick = 0;
   unsigned int _encoderTick2 = 0;
   byte _pinA, _pinB, _pinP;
+  Debouncer stDebouncer, pDebouncer;
 
 public:
   friend class EncoderInterruptClass;
@@ -54,23 +72,6 @@ private:
 public:
   friend void computeEncoder();
 };
-
-class Debouncer
-{
-  private:
-    byte _keepValue;
-    byte _bounce;
-    
-  public:
-    Debouncer():_keepValue(0), _bounce(0) {}
-    bool isDebounced( byte value, byte debounceCount);
-};
-
-#define DEBOUNCE_COUNT 3    // This is the number of consecutive reads that must be the same before accepting a pin change
-#define INTERRUPT_PERIOD 25 // This is   cpu_clock_frequency / prescaler / desired_interrupt_frequency
-                            // for example, set to 133 for 0.5ms (2kHz)  on a 16MHz processor: (16000000L / 64 / 2000  -> 133
-                            // for example, set to 50  for 0.2ms (5kHz)  on a 16MHz processor: (16000000L / 64 / 5000  -> 50
-                            // for example, set to 25  for 0.1ms (10kHz) on a 16MHz processor: (16000000L / 64 / 10000 -> 25
 
 extern EncoderInterruptClass EncoderInterrupt;
 
